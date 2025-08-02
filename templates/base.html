@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>To Do App</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>📝 To Do App</h1>
+
+    <!-- ✅ Form now points to /add, which accepts POST requests -->
+    <form method="POST" action="{{ url_for('add') }}">
+      <input type="text" name="title" placeholder="Enter your task..." required>
+      <button type="submit">Add</button>
+    </form>
+
+    {% for todo in todo_list %}
+    <div class="card {{ 'complete' if todo.complete else '' }}">
+      <span>{{ todo.id }} | {{ todo.title }}</span>
+
+      <div class="actions">
+        <!-- ✅ POST request to /update/<id> -->
+        <form method="POST" action="{{ url_for('update', todo_id=todo.id) }}">
+          <button type="submit" class="status-btn">
+            {{ 'Completed' if todo.complete else 'Mark Done' }}
+          </button>
+        </form>
+
+        <!-- ✅ POST request to /delete/<id> -->
+        <form method="POST" action="{{ url_for('delete', todo_id=todo.id) }}">
+          <button type="submit" class="delete-btn">🗑</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+</html>
